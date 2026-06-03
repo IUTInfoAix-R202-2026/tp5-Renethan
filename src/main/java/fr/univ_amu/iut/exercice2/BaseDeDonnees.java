@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.sql.DataSource;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteDataSource;
 
 /**
  * Exercice 2 : fournir une {@link DataSource} SQLite et initialiser le schéma.
@@ -35,7 +37,12 @@ public class BaseDeDonnees {
   public static DataSource surFichier(String chemin) {
     DataSource source = null;
 
-    // TODO exercice 2 : créer et configurer la DataSource SQLite, et l'affecter à `source`.
+    SQLiteConfig config = new SQLiteConfig();
+    config.enforceForeignKeys(true);
+    SQLiteDataSource sqlite = new SQLiteDataSource(config);
+    sqlite.setUrl("jdbc:sqlite:" + chemin);
+    source = sqlite;
+    // créer et configurer la DataSource SQLite, et l'affecter à `source`.
     //
     // 1. SQLiteConfig config = new SQLiteConfig();
     //    config.enforceForeignKeys(true);   // SQLite n'applique les FK que si on le demande
