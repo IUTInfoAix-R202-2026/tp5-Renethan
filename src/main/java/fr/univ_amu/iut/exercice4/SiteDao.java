@@ -72,7 +72,21 @@ public class SiteDao {
         "INSERT INTO site (numero_carre, nom_convivial, protocole, commentaire, date_creation)"
             + " VALUES (?, ?, ?, ?, ?)";
 
-    // TODO exercice 4 : insérer le site.
+    try (Connection connection = source.getConnection();
+        PreparedStatement pr = connection.prepareStatement(sql)) {
+
+      pr.setString(1, site.numeroCarre());
+      pr.setString(2, site.nomConvivial());
+      pr.setString(3, site.protocole());
+      pr.setString(4, site.commentaire());
+      pr.setString(5, site.dateCreation());
+
+      pr.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new DataAccessException("Erreur DataAccessException", e);
+    }
+    // insérer le site.
     //
     // - ouvrir une connexion + préparer la requête ;
     // - lier les 5 paramètres dans l'ordre des colonnes (setString) ;
@@ -86,7 +100,21 @@ public class SiteDao {
         "UPDATE site SET nom_convivial = ?, protocole = ?, commentaire = ?, date_creation = ?"
             + " WHERE numero_carre = ?";
 
-    // TODO exercice 4 : mettre à jour le site (mêmes étapes, executeUpdate).
+    try (Connection connection = source.getConnection();
+        PreparedStatement pr = connection.prepareStatement(sql)) {
+
+      pr.setString(1, site.nomConvivial());
+      pr.setString(2, site.protocole());
+      pr.setString(3, site.commentaire());
+      pr.setString(4, site.dateCreation());
+      pr.setString(5, site.numeroCarre());
+
+      pr.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new DataAccessException("Erreur DataAccessException", e);
+    }
+    // mettre à jour le site (mêmes étapes, executeUpdate).
     // Attention à l'ordre des paramètres : le numero_carre est le DERNIER (clause WHERE).
   }
 
@@ -94,7 +122,16 @@ public class SiteDao {
   public void delete(String numeroCarre) {
     String sql = "DELETE FROM site WHERE numero_carre = ?";
 
-    // TODO exercice 4 : supprimer le site (PreparedStatement + executeUpdate).
+    try (Connection connection = source.getConnection();
+        PreparedStatement pr = connection.prepareStatement(sql)) {
+
+      pr.setString(1, numeroCarre);
+      pr.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new DataAccessException("Erreur DataAccessExcepetion", e);
+    }
+    // supprimer le site (PreparedStatement + executeUpdate).
   }
 
   private static Site depuis(ResultSet rs) throws SQLException {
